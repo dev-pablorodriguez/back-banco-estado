@@ -9,7 +9,7 @@ const router = Router();
 const { check } = require('express-validator')
 const { mdlFieldValidator } = require('../middlewares')
 
-const { newUser, authUser, renewToken } = require('../controllers/auth')
+const { newClient, authClient, renewToken } = require('../controllers/auth')
 
 const { validateRut } = require('../helpers')
 
@@ -22,25 +22,32 @@ router.post(
             .withMessage('El rut es obligatorio.')
             .custom(value => validateRut(value))
             .withMessage('El rut ingresado no es válido.'),
+        check('name')
+            .notEmpty()
+            .withMessage('El nombre es obligatorio.'),
         check('password')
             .notEmpty()
             .withMessage('La contraseña es obligatoria.')
             .isLength({ min: 6 })
-            .withMessage('La contraseña debe contener mínimo 5 caracteres.'),
+            .withMessage('La contraseña debe contener mínimo 6 caracteres.'),
         mdlFieldValidator
     ],
-    newUser
+    newClient
 );
 
 router.post(
     '/',
     [
         //middlewares
-        check('rut', 'El rut es obligatorio.').not().isEmpty(),
-        check('password', 'La contraseña es obligatoria.').not().isEmpty(),
+        check('rut')
+            .notEmpty()
+            .withMessage('El rut es obligatorio.'),
+        check('password')
+            .notEmpty()
+            .withMessage('La contraseña es obligatoria.'),
         mdlFieldValidator
     ],
-    authUser
+    authClient
 );
 
 router.get('/renew', renewToken);

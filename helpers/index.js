@@ -1,3 +1,5 @@
+const bcrypt = require('bcryptjs')
+
 const validateRut = (rutCompleto) => {
     let rutSinPuntos = rutCompleto.replaceAll(".","");
 
@@ -20,6 +22,12 @@ const dv = (t) => {
 		return s?s-1:'k';
 }
 
+const encryptPassword = (rawPassword) => {
+    const salt = bcrypt.genSaltSync(5);
+    return bcrypt.hashSync(rawPassword, salt);
+}
+
 module.exports = {
-    validateRut
+    validateRut,
+    encryptPassword
 }
