@@ -3,7 +3,7 @@ const { request, response } = require('express');
 
 const { validationResult } = require('express-validator')
 
-const fieldValidator = (req = request, res = response, next) => {
+const mdlFieldValidator = (req = request, res = response, next) => {
     const errors = validationResult(req);
 
     if(!errors.isEmpty()){
@@ -17,5 +17,5 @@ const fieldValidator = (req = request, res = response, next) => {
 }
 
 module.exports = {
-    fieldValidator
+    mdlFieldValidator
 }

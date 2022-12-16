@@ -1,10 +1,14 @@
 const express = require('express');
+const { dbConnection } = require('./database/config')
 require('dotenv').config();
 
 const port = process.env.PORT;
 
 //create express server
 const app = express();
+
+//DB
+dbConnection();
 
 //Parse requests json body
 app.use(express.json());

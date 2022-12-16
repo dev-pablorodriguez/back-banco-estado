@@ -7,9 +7,30 @@ const { Router } = require('express');
 const router = Router();
 
 const { check } = require('express-validator')
-const { fieldValidator } = require('../middlewares/field-validator')
+const { mdlFieldValidator } = require('../middlewares')
 
-const { authUser, renewToken } = require('../controllers/auth')
+const { newUser, authUser, renewToken } = require('../controllers/auth')
+
+const { validateRut } = require('../helpers')
+
+router.post(
+    '/register',
+    [
+        //middlewares
+        check('rut')
+            .notEmpty()
+            .withMessage('El rut es obligatorio.')
+            .custom(value => validateRut(value))
+            .withMessage('El rut ingresado no es válido.'),
+        check('password')
+            .notEmpty()
+            .withMessage('La contraseña es obligatoria.')
+            .isLength({ min: 6 })
+            .withMessage('La contraseña debe contener mínimo 5 caracteres.'),
+        mdlFieldValidator
+    ],
+    newUser
+);
 
 router.post(
     '/',
@@ -17,7 +38,7 @@ router.post(
         //middlewares
         check('rut', 'El rut es obligatorio.').not().isEmpty(),
         check('password', 'La contraseña es obligatoria.').not().isEmpty(),
-        fieldValidator
+        mdlFieldValidator
     ],
     authUser
 );
