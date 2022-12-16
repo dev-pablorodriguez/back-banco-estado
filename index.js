@@ -6,10 +6,13 @@ const port = process.env.PORT;
 //create express server
 const app = express();
 
+//Parse requests json body
+app.use(express.json());
+
 //Routes
-app.get('/', (req, res) => {
-    res.json({ ok: true })
-})
+app.use('/api/auth', require('./routes/auth'));
+//Transferencias
+//Destinatarios
 
 //Listen requests
 app.listen(port, () => {
