@@ -7,9 +7,9 @@ const { Router } = require('express');
 const router = Router();
 
 const { check } = require('express-validator')
-const { mdlFieldValidator } = require('../middlewares')
+const { mdlFieldValidator, mdlValidateJwt } = require('../middlewares')
 
-const { newClient, authClient, renewToken } = require('../controllers/auth')
+const { newClient, authClient, refreshToken } = require('../controllers/auth')
 
 const { validateRut } = require('../helpers')
 
@@ -50,7 +50,7 @@ router.post(
     authClient
 );
 
-router.get('/renew', renewToken);
+router.get('/refresh', mdlValidateJwt, refreshToken);
 
 
 module.exports = router;

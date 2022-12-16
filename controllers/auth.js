@@ -1,7 +1,7 @@
 //used only for intellisense
 const { request, response } = require('express');
 
-const { encryptPassword } = require('../helpers')
+const { encryptPassword, validatePassword, generateJwt } = require('../helpers')
 const Client = require('../models/Client');
 
 const newClient  = async (req = request, res = response) => {
@@ -36,28 +36,66 @@ const newClient  = async (req = request, res = response) => {
 
         res.status(500).json({
             ok: false,
-            msg: 'Error al crear registro.'
+            msg: 'Error interno del sistema.'
         })
     }
 }
 
-const authClient = (req = request, res = response) => {
-    const { rut, password } = req.body;
+const authClient = async (req = request, res = response) => {
+    try {
+        let { rut } = req.body;
+        rut = rut.replaceAll('.', '');
 
-    res.json({
-        ok: true,
-        msg: 'Autenticación',
-        rut,
-        password
-    })
+        const { password } = req.body;
+
+        let client = await Client.findOne({ rut });
+        
+        if(!client){
+            return res.status(400).json({
+                ok: false,
+                msg: 'Credenciales incorrectas.'
+            });
+        }
+
+        const isValidPassword = validatePassword(password, client.password)
+
+        if(!isValidPassword){
+            return res.status(400).json({
+                ok: false,
+                msg: 'Credenciales incorrectas.'
+            });
+        }
+
+        //Generate JWT
+        const token = await generateJwt(client._id, client.name);
+
+        res.status(200).json({
+            ok: true,
+            uid: client._id,
+            name: client.name,
+            token
+        })
+
+        
+    } catch (error) {
+        console.log(error)
+
+        res.status(500).json({
+            ok: false,
+            msg: 'Error interno del sistema.'
+        })
+    }
 }
 
-const renewToken = (req = request, res = response) => {
-    res.json({ ok: true })
+const refreshToken = async (req = request, res = response) => {
+    //Generate JWT
+    const token = await generateJwt(req.uid, req.name);
+
+    res.json({ ok: true, token })
 }
 
 module.exports = {
     newClient,
     authClient,
-    renewToken
+    refreshToken
 }
