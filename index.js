@@ -20,7 +20,7 @@ app.use(express.json());
 //Routes
 app.use('/api/auth', require('./routes/auth'));
 //Transferencias
-//Destinatarios
+app.use('/api/destinatarios', require('./routes/destinatarios'));
 
 //Listen requests
 app.listen(port, () => {

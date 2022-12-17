@@ -3,16 +3,16 @@ const { Schema, model } = require('mongoose');
 const ClientSchema = Schema({
     rut: {
         type: String,
-        require: true,
+        required: true,
         unique: true
     },
     name: {
         type: String,
-        require: true
+        required: true
     },
     password: {
         type: String,
-        require: true
+        required: true
     }
 })
 

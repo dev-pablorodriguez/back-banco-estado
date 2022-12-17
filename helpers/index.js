@@ -1,13 +1,15 @@
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken');
 
-const validateRut = rutCompleto => {
-    let rutSinPuntos = rutCompleto.replaceAll(".","");
+const cleanRut = rut => rut.replaceAll('.', '');
 
-    if (!/^[0-9]+[-|‐]{1}[0-9kK]{1}$/.test(rutSinPuntos))
+const validateRut = rawRut => {
+    let rutWithoutDots = cleanRut(rawRut);
+
+    if (!/^[0-9]+[-|‐]{1}[0-9kK]{1}$/.test(rutWithoutDots))
         return false;
 
-    let tmp = rutSinPuntos.split('-');
+    let tmp = rutWithoutDots.split('-');
     let digv = tmp[1]; 
     let rut = tmp[0];
 
@@ -52,6 +54,7 @@ const generateJwt = (uid, name) => {
 }
 
 module.exports = {
+    cleanRut,
     validateRut,
     encryptPassword,
     validatePassword,

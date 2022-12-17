@@ -1,13 +1,13 @@
 //used only for intellisense
 const { request, response } = require('express');
 
-const { encryptPassword, validatePassword, generateJwt } = require('../helpers')
+const { cleanRut, encryptPassword, validatePassword, generateJwt } = require('../helpers')
 const Client = require('../models/Client');
 
 const newClient  = async (req = request, res = response) => {
     try {
         let { rut } = req.body;
-        rut = rut.replaceAll('.', '');
+        rut = cleanRut(rut);
 
         const { name, password } = req.body;
 
@@ -44,7 +44,7 @@ const newClient  = async (req = request, res = response) => {
 const authClient = async (req = request, res = response) => {
     try {
         let { rut } = req.body;
-        rut = rut.replaceAll('.', '');
+        rut = cleanRut(rut);
 
         const { password } = req.body;
 
