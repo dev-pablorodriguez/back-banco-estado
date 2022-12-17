@@ -30,6 +30,10 @@ const DestinatarioSchema = Schema({
         type: Schema.Types.ObjectId,
         ref: 'Client',
         required: true
+    },
+    deleted: {
+        type: Boolean,
+        required: true
     }
 })
 

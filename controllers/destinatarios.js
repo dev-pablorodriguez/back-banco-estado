@@ -7,7 +7,8 @@ const Bank = require('../models/Bank');
 
 const getDestinatariosByClientId  = async (req = request, res = response) => {
     try {
-        const destinatarios = await Destinatario.find({ client: req.uid })
+        const destinatarios = await Destinatario.find({ client: req.uid, deleted: false })
+                                                .select('-deleted')//exclude deleted field
                                                 .populate('client', 'rut name');
 
         res.status(200).json({
@@ -43,6 +44,7 @@ const createDestinatario  = async (req = request, res = response) => {
         const destinatario = new Destinatario(req.body);
         destinatario.rut = rut;//use clean rut
         destinatario.client = req.uid;
+        destinatario.deleted = false;
 
         await destinatario.save();
 
@@ -98,7 +100,7 @@ const updateDestinatario = async (req = request, res = response) => {
 const deleteDestinatario = async (req = request, res = response) => {
     try {
         //Un destinatario solo puede ser eliminado por el usuario que lo creó
-        const destinatario = await Destinatario.findOne({ _id: req.params.id, client: req.uid });
+        const destinatario = await Destinatario.findOne({ _id: req.params.id, client: req.uid, deleted: false });
 
         if(!destinatario){
             return res.status(404).json({
@@ -107,13 +109,14 @@ const deleteDestinatario = async (req = request, res = response) => {
             });
         }
 
-        const deleted = await Destinatario
-                                .findByIdAndDelete(req.params.id)
-                                .populate('client', 'rut name');
+        const logicallyDeleted = await Destinatario
+                                    .findByIdAndUpdate(req.params.id, { deleted: true }, { new: true })//get the updated document
+                                    .select('-deleted')
+                                    .populate('client', 'rut name');
 
         res.json({
             ok: true,
-            destinatario: deleted
+            destinatario: logicallyDeleted
         })
     } catch (error) {
         console.log(error)
