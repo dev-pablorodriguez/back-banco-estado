@@ -69,31 +69,16 @@ router.put(
     '/:id',
     [
         //middlewares
-        check('name')
-            .notEmpty()
-            .withMessage('El nombre es obligatorio.'),
         check('email')
             .notEmpty()
             .withMessage('El email es obligatorio.')
             .isEmail()
             .withMessage('El email es incorrecto.'),
         check('phone')
-            .notEmpty()
-            .withMessage('El teléfono es obligatorio.')
-            .isNumeric()
-            .withMessage('El teléfono no tiene el formato correcto.')
+            .isInt()
+            .withMessage('El teléfono debe contener únicamente valores numéricos.')
             .isLength({ min: 9, max: 9 })
             .withMessage('El teléfono debe tener 9 caracteres.'),
-        check('accountNumber')
-            .notEmpty()
-            .withMessage('El número de cuenta es obligatorio.')
-            .isNumeric()
-            .withMessage('El número de cuenta debe tener 10 caracteres numéricos.')
-            .isLength({ min: 10, max: 10 })
-            .withMessage('El número de cuenta debe tener 10 caracteres numéricos.'),
-        check('bank')
-            .notEmpty()
-            .withMessage('El banco es obligatorio.'),
         mdlFieldValidator
     ],
     updateDestinatario

@@ -60,8 +60,10 @@ const updateDestinatario = async (req = request, res = response) => {
             });
         }
 
-        //Remove properties that cannot be modified
-        const { _id, rut, client, __v, ...destinatarioUpd } = req.body;
+        const { email, phone } = req.body;
+        const { ...destinatarioUpd } = destinatario._doc;
+        destinatarioUpd.email = email;
+        destinatarioUpd.phone = phone;
 
         const modified = await Destinatario
                                 .findByIdAndUpdate(req.params.id, destinatarioUpd, { new: true })//get the updated document
