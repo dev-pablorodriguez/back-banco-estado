@@ -41,35 +41,7 @@ const createBank  = async (req = request, res = response) => {
     }
 }
 
-const deleteBank = async (req = request, res = response) => {
-    try {
-        const bank = await Bank.findById(req.params.id);
-
-        if(!bank){
-            return res.status(404).json({
-                ok: false,
-                msg: 'No se encontró el banco.'
-            });
-        }
-
-        const deleted = await Bank.findByIdAndDelete(req.params.id)
-
-        res.json({
-            ok: true,
-            bank: deleted
-        })
-    } catch (error) {
-        console.log(error)
-
-        res.status(500).json({
-            ok: false,
-            msg: 'Error interno del sistema.'
-        })
-    }
-}
-
 module.exports = {
     getBanks,
-    createBank,
-    deleteBank
+    createBank
 }

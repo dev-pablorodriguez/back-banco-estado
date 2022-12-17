@@ -9,7 +9,7 @@ const router = Router();
 const { check } = require('express-validator')
 const { mdlFieldValidator } = require('../middlewares')
 
-const { getBanks, createBank, deleteBank } = require('../controllers/banks')
+const { getBanks, createBank } = require('../controllers/banks')
 
 router.get(
     '/',
@@ -28,11 +28,6 @@ router.post(
         mdlFieldValidator
     ],
     createBank
-);
-
-router.delete(
-    '/:id',
-    deleteBank
 );
 
 module.exports = router;
