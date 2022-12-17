@@ -21,6 +21,7 @@ app.use(express.json());
 app.use('/api/auth', require('./routes/auth'));
 //Transferencias
 app.use('/api/destinatarios', require('./routes/destinatarios'));
+app.use('/api/banks', require('./routes/banks'));
 
 //Listen requests
 app.listen(port, () => {
