@@ -73,8 +73,10 @@ router.put(
             .notEmpty()
             .withMessage('El email es obligatorio.')
             .isEmail()
-            .withMessage('El email es incorrecto.'),
+            .withMessage('El email no tiene el formato correcto.'),
         check('phone')
+            .notEmpty()
+            .withMessage('El teléfono es obligatorio.')
             .isInt()
             .withMessage('El teléfono debe contener únicamente valores numéricos.')
             .isLength({ min: 9, max: 9 })
