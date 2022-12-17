@@ -3,6 +3,7 @@ const { request, response } = require('express');
 
 const { cleanRut } = require('../helpers')
 const Destinatario = require('../models/Destinatario');
+const Bank = require('../models/Bank');
 
 const getDestinatariosByClientId  = async (req = request, res = response) => {
     try {
@@ -27,6 +28,17 @@ const createDestinatario  = async (req = request, res = response) => {
     try {
         let { rut } = req.body;
         rut = cleanRut(rut);
+        const { bank: bankId } = req.body;
+
+        //Check if the bank exists in the DB
+        const bank = await Bank.exists({ _id: bankId });
+
+        if(!bank){
+            return res.status(404).json({
+                ok: false,
+                msg: 'El banco de destino no existe.'
+            });
+        }
 
         const destinatario = new Destinatario(req.body);
         destinatario.rut = rut;//use clean rut

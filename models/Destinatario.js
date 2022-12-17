@@ -22,7 +22,8 @@ const DestinatarioSchema = Schema({
         required: true
     },
     bank: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'Bank',
         required: true
     },
     client: {
