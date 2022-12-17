@@ -9,7 +9,8 @@ const getDestinatariosByClientId  = async (req = request, res = response) => {
     try {
         const destinatarios = await Destinatario.find({ client: req.uid, deleted: false })
                                                 .select('-deleted')//exclude deleted field
-                                                .populate('client', 'rut name');
+                                                .populate('client', 'rut name')
+                                                .populate('bank', 'name');
 
         res.status(200).json({
             ok: true,
@@ -81,7 +82,8 @@ const updateDestinatario = async (req = request, res = response) => {
 
         const modified = await Destinatario
                                 .findByIdAndUpdate(req.params.id, destinatarioUpd, { new: true })//get the updated document
-                                .populate('client', 'rut name');
+                                .populate('client', 'rut name')
+                                .populate('bank', 'name');
 
         res.json({
             ok: true,
@@ -112,7 +114,8 @@ const deleteDestinatario = async (req = request, res = response) => {
         const logicallyDeleted = await Destinatario
                                     .findByIdAndUpdate(req.params.id, { deleted: true }, { new: true })//get the updated document
                                     .select('-deleted')
-                                    .populate('client', 'rut name');
+                                    .populate('client', 'rut name')
+                                    .populate('bank', 'name');
 
         res.json({
             ok: true,
