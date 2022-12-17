@@ -20,7 +20,7 @@ const mdlFieldValidator = (req = request, res = response, next) => {
 const mdlValidateJwt = (req = request, res = response, next) => {
     ///Get Authorization header
     const header = req.header('Authorization');
-    const token = header.replace('Bearer ', '');
+    const token = header?.replace('Bearer ', '');
 
     if(!token){
         return res.status(401).json({
