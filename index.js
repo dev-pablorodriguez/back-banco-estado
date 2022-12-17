@@ -19,7 +19,7 @@ app.use(express.json());
 
 //Routes
 app.use('/api/auth', require('./routes/auth'));
-//Transferencias
+app.use('/api/transferencias', require('./routes/transferencias'));
 app.use('/api/destinatarios', require('./routes/destinatarios'));
 app.use('/api/banks', require('./routes/banks'));
 
