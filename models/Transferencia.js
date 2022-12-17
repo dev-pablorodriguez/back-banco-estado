@@ -2,7 +2,7 @@ const { Schema, model } = require('mongoose');
 
 const TransferenciaSchema = Schema({
     amount: {
-        type: String,
+        type: Number,
         required: true,
     },
     client: {
